@@ -1,0 +1,22 @@
+.products-table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 75vw;
+    margin: 0 auto;
+    margin-top: 10vh;
+}
+
+.products-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.products-table .products-table-header {
+    padding: 1rem;
+    border-bottom: 1px solid black;
+    background-color: #cfcbcb;
+}
+
+.products-table .products-table-data {
+    padding: 1rem;
+    text-align: center;
+}
