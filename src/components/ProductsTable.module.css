@@ -1,9 +1,23 @@
-.products-table {
+.products {
     border: 1px solid black;
-    border-collapse: collapse;
+    margin: 10vh auto;
     width: 75vw;
-    margin: 0 auto;
-    margin-top: 10vh;
+}
+
+.products .products-filters {
+    display: flex;
+    padding: 1em;
+}
+
+.products .products-filters .products-filters-filter {
+    margin: 1em;
+    border: 1px solid black;
+    display: flex;
+}
+
+.products-table {
+    border-collapse: collapse;
+    width: 100%;
 }
 
 .products-table tr:nth-child(even) {

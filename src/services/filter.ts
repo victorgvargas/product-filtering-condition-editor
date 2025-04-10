@@ -3,35 +3,76 @@ import { datastore } from "@/data/datastore";
 
 class FiltersService {
   private readonly products: Product[];
-  private properties: Property[];
-  private filteredProducts: Product[];
 
   constructor() {
     this.products = datastore.getProducts();
-    this.properties = datastore.getProperties();
-    this.filteredProducts = [];
   }
 
-  selectColumn(propertyId: number) {
-    const property = this.properties.find((prop) => propertyId === prop.id);
+  equalsFilter(property: Property, value: PropertyValue) {
+    return this.products.filter((product) =>
+      product.property_values.filter(
+        (prod) => prod.property_id === property.id && prod.value === value.value
+      )
+    );
+  }
 
-    if (property) {
-      const values = this.products.filter((product: Product) =>
-        product.property_values.find(
-          (propVal: PropertyValue) => propVal.property_id === property.id
+  isGreaterThanFilter(property: Property, value: number) {
+    return this.products.filter((product) =>
+      product.property_values.filter(
+        (prod) =>
+          prod.property_id === property.id &&
+          typeof prod.value === "number" &&
+          prod.value > value
+      )
+    );
+  }
+
+  isLessThanFilter(property: Property, value: number) {
+    return this.products.filter((product) =>
+      product.property_values.filter(
+        (prod) =>
+          prod.property_id === property.id &&
+          typeof prod.value === "number" &&
+          prod.value < value
+      )
+    );
+  }
+
+  hasAnyValueFilter(property: Property) {
+    return this.products.filter((product) =>
+      product.property_values.some((prod) => prod.property_id === property.id)
+    );
+  }
+
+  hasNoValueFilter(property: Property) {
+    return this.products.filter(
+      (product) =>
+        !product.property_values.some(
+          (prod) => prod.property_id === property.id
         )
-      );
-
-      this.filteredProducts = [...values];
-    }
-
-    return this;
+    );
   }
 
-  equalsFilter(products: Product[]) {
-    return this.filteredProducts.filter((product) => {
-      products.some((prod) => prod === product);
-    });
+  isAnyOfFilter(property: Property, values: PropertyValue[]) {
+    return this.products.filter((product) =>
+      product.property_values.filter(
+        (prod) =>
+          prod.property_id === property.id &&
+          values.filter((val) => prod.value === val.value)
+      )
+    );
+  }
+
+  containsFilter(property: Property, value: PropertyValue) {
+    return this.products.filter((product) =>
+      product.property_values.filter(
+        (prod) =>
+          prod.property_id === property.id &&
+          typeof prod.value === "string" &&
+          typeof value.value === "string" &&
+          prod.value.includes(value.value)
+      )
+    );
   }
 }
 
