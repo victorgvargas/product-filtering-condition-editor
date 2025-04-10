@@ -1,8 +1,9 @@
 "use client";
 
 import { filtersService } from "@/services/filter";
-import { Product, Property } from "@/types/products";
+import { Operator, Product, Property, PropertyValue } from "@/types/products";
 import styles from "./ProductsTable.module.css";
+import { useEffect, useState } from "react";
 
 interface ProductsTableProps {
   products: Product[];
@@ -13,18 +14,100 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
   products,
   properties,
 }) => {
+  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [selectedProperty, setSelectedProperty] = useState<Property>();
+  const [selectedOperator, setSelectedOperator] = useState<Operator>();
+  const [propertyValues, setPropertyValues] = useState<PropertyValue[]>();
+
+  const findProperty = (id: number) => {
+    return (
+      properties.find((property: Property) => property.id === id) ??
+      properties[0]
+    );
+  };
+
+  const findOperator = (id: string) => {
+    return (
+      filtersService.operators.find(
+        (operator: Operator) => operator.id === id
+      ) ?? filtersService.operators[0]
+    );
+  };
+
+  const findPropertyValues = (id: number): PropertyValue[] => {
+    return products
+      .filter((product) =>
+        product.property_values.find(
+          (propertyValue) => propertyValue.property_id === id
+        )
+      )
+      .map((product) => product.property_values)
+      .flat();
+  };
+
+  useEffect(() => {
+    if (selectedProperty && selectedOperator) {
+      setPropertyValues(findPropertyValues(selectedProperty.id));
+    }
+  }, [selectedProperty, selectedOperator]);
+
   return (
     <section className={styles["products"]}>
       <div className={styles["products-filters"]}>
         <div className={styles["products-filters-filter"]}>
-          <label htmlFor="properties">Select a property</label>
-          <select name="properties" id="properties"></select>
+          <select
+            name="properties"
+            id="properties"
+            onChange={(event) =>
+              setSelectedProperty(findProperty(Number(event.target.value)))
+            }
+          >
+            <optgroup label="Properties">
+              {properties.map((property) => (
+                <option key={property.id} value={property.id}>
+                  {property.name}
+                </option>
+              ))}
+            </optgroup>
+          </select>
         </div>
 
         <div className={styles["products-filters-filter"]}>
-          <label htmlFor="operators">Select an operator</label>
-          <select name="operators" id="operators"></select>
+          <select
+            name="property-values"
+            id="property-values"
+            onChange={(event) =>
+              setSelectedOperator(findOperator(event.target.value))
+            }
+          >
+            <optgroup label="Property Values">
+              {filtersService.operators.map((operator) => (
+                <option key={operator.id} value={operator.id}>
+                  {operator.text}
+                </option>
+              ))}
+            </optgroup>
+          </select>
         </div>
+        {propertyValues && (
+          <div className={styles["products-filters-filter"]}>
+            <select
+              name="operators"
+              id="operators"
+              onChange={(event) =>
+                setSelectedOperator(findOperator(event.target.value))
+              }
+            >
+              <optgroup label="Operators">
+                {propertyValues.map((propVal, index) => (
+                  <option key={index} value={propVal.property_id}>
+                    {propVal.value}
+                  </option>
+                ))}
+              </optgroup>
+            </select>
+          </div>
+        )}
       </div>
 
       <table className={styles["products-table"]}>
@@ -44,7 +127,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => {
+          {filteredProducts.map((product) => {
             return (
               <tr key={product.id}>
                 {product.property_values.map((val) => {

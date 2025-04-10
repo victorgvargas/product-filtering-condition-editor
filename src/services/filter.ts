@@ -1,11 +1,15 @@
-import { Product, Property, PropertyValue } from "@/types/products";
+import { Operator, Product, Property, PropertyValue } from "@/types/products";
 import { datastore } from "@/data/datastore";
 
 class FiltersService {
   private readonly products: Product[];
+  readonly operators: Operator[];
+  readonly properties: Property[];
 
   constructor() {
     this.products = datastore.getProducts();
+    this.operators = datastore.getOperators();
+    this.properties = datastore.getProperties();
   }
 
   equalsFilter(property: Property, value: PropertyValue) {
