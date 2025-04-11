@@ -6,13 +6,25 @@
 
 .products .products-filters {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem;
+}
+
+.products .products-filters .products-filters-container {
+    display: flex;
     padding: 1em;
 }
 
-.products .products-filters .products-filters-filter {
+.products .products-filters .products-filters-container .products-filters-filter {
     margin: 1em;
     border: 1px solid black;
-    display: flex;
+}
+
+.products .products-filters .products-filters-clear {
+    height: fit-content;
+    padding: .25rem;
+    border-radius: .25rem;
 }
 
 .products-table {
