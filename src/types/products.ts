@@ -1,21 +1,22 @@
 export interface PropertyValue {
-    property_id: number;
-    value: string | number;
+  property_id: number;
+  value: string | number;
 }
 
 export interface Product {
-    id: number;
-    property_values: PropertyValue[];
+  id: number;
+  property_values: PropertyValue[];
 }
 
 export interface Property {
-    id: number;
-    name: string;
-    type: string;
-    values?: string[];
+  id: number;
+  name: string;
+  type: string;
+  values?: string[];
 }
 
 export interface Operator {
-    text: string;
-    id: string;
+  text: string;
+  id: string;
+  supportedTypes: string[];
 }

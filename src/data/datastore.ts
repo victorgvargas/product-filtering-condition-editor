@@ -1,13 +1,13 @@
 export const datastore = {
-  getProducts: function() {
+  getProducts: function () {
     return this.products;
   },
 
-  getProperties: function() {
+  getProperties: function () {
     return this.properties;
   },
 
-  getOperators: function() {
+  getOperators: function () {
     return this.operators;
   },
 
@@ -17,206 +17,206 @@ export const datastore = {
       property_values: [
         {
           property_id: 0,
-          value: 'Headphones'
+          value: "Headphones",
         },
         {
           property_id: 1,
-          value: 'black'
+          value: "black",
         },
         {
           property_id: 2,
-          value: 5
+          value: 5,
         },
         {
           property_id: 3,
-          value: 'electronics'
+          value: "electronics",
         },
         {
           property_id: 4,
-          value: 'false'
-        }
-      ]
+          value: "false",
+        },
+      ],
     },
     {
       id: 1,
       property_values: [
         {
           property_id: 0,
-          value: 'Cell Phone'
+          value: "Cell Phone",
         },
         {
           property_id: 1,
-          value: 'black'
+          value: "black",
         },
         {
           property_id: 2,
-          value: 3
+          value: 3,
         },
         {
           property_id: 3,
-          value: 'electronics'
+          value: "electronics",
         },
         {
           property_id: 4,
-          value: 'true'
-        }
-      ]
+          value: "true",
+        },
+      ],
     },
     {
       id: 2,
       property_values: [
         {
           property_id: 0,
-          value: 'Keyboard'
+          value: "Keyboard",
         },
         {
           property_id: 1,
-          value: 'grey'
+          value: "grey",
         },
         {
           property_id: 2,
-          value: 5
+          value: 5,
         },
         {
           property_id: 3,
-          value: 'electronics'
+          value: "electronics",
         },
         {
           property_id: 4,
-          value: 'false'
-        }
-      ]
+          value: "false",
+        },
+      ],
     },
     {
       id: 3,
       property_values: [
         {
           property_id: 0,
-          value: 'Cup'
+          value: "Cup",
         },
         {
           property_id: 1,
-          value: 'white'
+          value: "white",
         },
         {
           property_id: 2,
-          value: 3
+          value: 3,
         },
         {
           property_id: 3,
-          value: 'kitchenware'
-        }
-      ]
+          value: "kitchenware",
+        },
+      ],
     },
     {
       id: 4,
       property_values: [
         {
           property_id: 0,
-          value: 'Key'
+          value: "Key",
         },
         {
           property_id: 1,
-          value: 'silver'
+          value: "silver",
         },
         {
           property_id: 2,
-          value: 1
+          value: 1,
         },
         {
           property_id: 3,
-          value: 'tools'
-        }
-      ]
+          value: "tools",
+        },
+      ],
     },
     {
       id: 5,
       property_values: [
         {
           property_id: 0,
-          value: 'Hammer'
+          value: "Hammer",
         },
         {
           property_id: 1,
-          value: 'brown'
+          value: "brown",
         },
         {
           property_id: 2,
-          value: 19
+          value: 19,
         },
         {
           property_id: 3,
-          value: 'tools'
-        }
-      ]
-    }
+          value: "tools",
+        },
+      ],
+    },
   ],
 
   properties: [
     {
       id: 0,
-      name: 'Product Name',
-      type: 'string'
+      name: "Product Name",
+      type: "string",
     },
     {
       id: 1,
-      name: 'color',
-      type: 'string'
+      name: "color",
+      type: "string",
     },
     {
       id: 2,
-      name: 'weight (oz)',
-      type: 'number'
+      name: "weight (oz)",
+      type: "number",
     },
     {
       id: 3,
-      name: 'category',
-      type: 'enumerated',
-      values: [
-        'tools',
-        'electronics',
-        'kitchenware'
-      ]
+      name: "category",
+      type: "enumerated",
+      values: ["tools", "electronics", "kitchenware"],
     },
     {
       id: 4,
-      name: 'wireless',
-      type: 'enumerated',
-      values: [
-        'true',
-        'false'
-      ]
-    }
+      name: "wireless",
+      type: "enumerated",
+      values: ["true", "false"],
+    },
   ],
 
   operators: [
     {
-      text: 'Equals',
-      id: 'equals'
+      text: "Equals",
+      id: "equals",
+      supportedTypes: ["string", "number", "enumerated"],
     },
     {
-      text: 'Is greater than',
-      id: 'greater_than'
+      text: "Is greater than",
+      id: "greater_than",
+      supportedTypes: ["number"],
     },
     {
-      text: 'Is less than',
-      id: 'less_than'
+      text: "Is less than",
+      id: "less_than",
+      supportedTypes: ["number"],
     },
     {
-      text: 'Has any value',
-      id: 'any'
+      text: "Has any value",
+      id: "any",
+      supportedTypes: ["string", "number", "enumerated"],
     },
     {
-      text: 'Has no value',
-      id: 'none'
+      text: "Has no value",
+      id: "none",
+      supportedTypes: ["string", "number", "enumerated"],
     },
     {
-      text: 'Is any of',
-      id: 'in'
+      text: "Is any of",
+      id: "in",
+      supportedTypes: ["string", "number", "enumerated"],
     },
     {
-      text: 'Contains',
-      id: 'contains'
-    }
-  ]
-}
+      text: "Contains",
+      id: "contains",
+      supportedTypes: ["string"],
+    },
+  ],
+};

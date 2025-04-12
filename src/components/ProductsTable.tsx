@@ -8,18 +8,23 @@ import { useEffect, useState } from "react";
 interface ProductsTableProps {
   products: Product[];
   properties: Property[];
+  operators: Operator[];
 }
 
 const ProductsTable: React.FC<ProductsTableProps> = ({
   products,
   properties,
+  operators,
 }) => {
   const [filteredProducts, setFilteredProducts] = useState(products);
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>();
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
+    properties[0]
+  );
   const [selectedOperator, setSelectedOperator] = useState<Operator | null>();
   const [propertyValues, setPropertyValues] = useState<
     PropertyValue[] | null
   >();
+  const [availableOperators, setAvailableOperators] = useState<Operator[]>([]);
 
   const findProperty = (id: number) => {
     return (
@@ -30,9 +35,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
 
   const findOperator = (id: string) => {
     return (
-      filtersService.operators.find(
-        (operator: Operator) => operator.id === id
-      ) ?? filtersService.operators[0]
+      operators.find((operator: Operator) => operator.id === id) ?? operators[0]
     );
   };
 
@@ -59,6 +62,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
     }
   }, [selectedProperty, selectedOperator]);
 
+  useEffect(() => {
+    setAvailableOperators(
+      operators.filter((operator) =>
+        operator.supportedTypes.includes(selectedProperty?.type || "")
+      )
+    );
+  }, [selectedProperty]);
+
   return (
     <section className={styles["products"]}>
       <div className={styles["products-filters"]}>
@@ -70,8 +81,12 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
               onChange={(event) =>
                 setSelectedProperty(findProperty(Number(event.target.value)))
               }
+              defaultValue="Select a property"
             >
               <optgroup label="Properties">
+                <option value="Select a property" hidden>
+                  Select a property
+                </option>
                 {properties.map((property) => (
                   <option key={property.id} value={property.id}>
                     {property.name}
@@ -83,14 +98,18 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
 
           <div className={styles["products-filters-filter"]}>
             <select
-              name="property-values"
-              id="property-values"
+              name="operators"
+              id="operators"
               onChange={(event) =>
                 setSelectedOperator(findOperator(event.target.value))
               }
+              defaultValue="Select an operator"
             >
-              <optgroup label="Property Values">
-                {filtersService.operators.map((operator) => (
+              <optgroup label="Operators">
+                <option value="Select an operator" hidden>
+                  Select an operator
+                </option>
+                {availableOperators.map((operator) => (
                   <option key={operator.id} value={operator.id}>
                     {operator.text}
                   </option>
@@ -100,14 +119,8 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
           </div>
           {propertyValues && (
             <div className={styles["products-filters-filter"]}>
-              <select
-                name="operators"
-                id="operators"
-                onChange={(event) =>
-                  setSelectedOperator(findOperator(event.target.value))
-                }
-              >
-                <optgroup label="Operators">
+              <select name="property-values" id="property-values">
+                <optgroup label="Property values">
                   {propertyValues.map((propVal, index) => (
                     <option key={index} value={propVal.property_id}>
                       {propVal.value}
