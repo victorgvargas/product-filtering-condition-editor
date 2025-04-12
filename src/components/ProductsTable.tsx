@@ -40,32 +40,47 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
   };
 
   const findPropertyValues = (id: number): PropertyValue[] => {
-    return products
-      .filter((product) =>
-        product.property_values.find(
-          (propertyValue) => propertyValue.property_id === id
-        )
-      )
-      .map((product) => product.property_values)
-      .flat();
+    const uniqueValues = new Map<string, PropertyValue>();
+    products.forEach((product) => {
+      const propertyValue = product.property_values.find(
+        (propertyValue) =>
+          propertyValue.property_id === id &&
+          selectedOperator?.supportedTypes.includes(typeof propertyValue.value)
+      );
+      if (propertyValue && !uniqueValues.has(String(propertyValue.value))) {
+        uniqueValues.set(String(propertyValue.value), propertyValue);
+      }
+    });
+    return Array.from(uniqueValues.values());
   };
 
   const clearFilters = () => {
     setSelectedOperator(null);
     setSelectedProperty(null);
     setPropertyValues(null);
+    setFilteredProducts(products);
   };
 
   useEffect(() => {
     if (selectedProperty && selectedOperator) {
-      setPropertyValues(findPropertyValues(selectedProperty.id));
+      if (selectedOperator.id === "any" || selectedOperator.id === "none") {
+        const filtered = filtersService.filterProducts(
+          selectedProperty as Property,
+          propertyValues as PropertyValue[],
+          selectedOperator
+        );
+        setFilteredProducts(filtered ?? []);
+        setPropertyValues(null);
+      } else {
+        setPropertyValues(findPropertyValues(selectedProperty.id));
+      }
     }
   }, [selectedProperty, selectedOperator]);
 
   useEffect(() => {
     setAvailableOperators(
       operators.filter((operator) =>
-        operator.supportedTypes.includes(selectedProperty?.type || "")
+        operator.supportedTypes.includes(selectedProperty?.type ?? "")
       )
     );
   }, [selectedProperty]);
@@ -119,10 +134,53 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
           </div>
           {propertyValues && (
             <div className={styles["products-filters-filter"]}>
-              <select name="property-values" id="property-values">
+              <select
+                name="property-values"
+                id="property-values"
+                multiple={selectedOperator?.id === "in"}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                  if (propertyValues && selectedOperator) {
+                    if (selectedOperator.id === "in") {
+                      const selectedValues = Array.from(
+                        event.target.selectedOptions
+                      )
+                        .map((option) =>
+                          propertyValues.find(
+                            (propVal) => String(propVal.value) === option.value
+                          )
+                        )
+                        .filter(
+                          (value): value is PropertyValue => value !== undefined
+                        );
+
+                      const filtered =
+                        filtersService.filterProducts(
+                          selectedProperty as Property,
+                          selectedValues,
+                          selectedOperator
+                        ) ?? [];
+                      setFilteredProducts(filtered);
+                    } else {
+                      const selectedValue = propertyValues.find(
+                        (propVal) =>
+                          String(propVal.value) === event.target.value
+                      );
+                      if (selectedValue) {
+                        const filtered =
+                          filtersService.filterProducts(
+                            selectedProperty as Property,
+                            selectedValue,
+                            selectedOperator
+                          ) ?? [];
+                        setFilteredProducts(filtered);
+                      }
+                    }
+                  }
+                }}
+              >
                 <optgroup label="Property values">
-                  {propertyValues.map((propVal, index) => (
-                    <option key={index} value={propVal.property_id}>
+                  {propertyValues?.map((propVal, index) => (
+                    <option key={index} value={String(propVal.value)}>
                       {propVal.value}
                     </option>
                   ))}
