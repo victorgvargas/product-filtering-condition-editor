@@ -20,17 +20,17 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Unit tests
 
-To learn more about Next.js, take a look at the following resources:
+To run the unit tests, please run:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm test
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## About the project
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The code has a layer of services which concentrates all the logic for filtering. This was considered a better option for separation of concerns and also reusing it whenever the
+application could grow. As I'm using Next.js, I chose to fetch the data from a server component and apply all stateful logic inside the products table. I added the mock data to
+a datastore folder and added a supportedTypes field to the operators as I thought it made more sense for this information to be coupled with an operator. Every chunk of data is
+properly typed in the types folder. The full exercise took around 8 hours to be completed.
