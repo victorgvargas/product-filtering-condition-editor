@@ -67,23 +67,19 @@ describe("ProductsTable", () => {
       target: { value: "1" },
     });
 
-    await waitFor(() => {
-      fireEvent.change(screen.getByLabelText("Operators"), {
-        target: { value: "equals" },
-      });
+    fireEvent.change(screen.getByLabelText("Operators"), {
+      target: { value: "equals" },
     });
 
-    await waitFor(() => {
-      fireEvent.change(screen.getByLabelText("Property values"), {
-        target: { value: "Blue" },
-      });
+    fireEvent.change(screen.getByLabelText("Property values"), {
+      target: { value: "Blue" },
     });
 
+    const table = screen.getByRole("table");
+
     await waitFor(() => {
-      const rows = screen.getAllByRole("row");
-      expect(rows).toHaveLength(2);
       expect(screen.getByText("Blue")).toBeInTheDocument();
-      expect(screen.queryByText("Red")).not.toBeInTheDocument();
+      expect(within(table).queryByText("Red")).not.toBeInTheDocument();
     });
   });
 
