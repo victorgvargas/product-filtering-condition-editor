@@ -93,6 +93,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
             <select
               name="properties"
               id="properties"
+              aria-label="Properties"
               onChange={(event) =>
                 setSelectedProperty(findProperty(Number(event.target.value)))
               }
@@ -103,7 +104,11 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                   Select a property
                 </option>
                 {properties.map((property) => (
-                  <option key={property.id} value={property.id}>
+                  <option
+                    key={property.id}
+                    value={property.id}
+                    aria-label={property.name}
+                  >
                     {property.name}
                   </option>
                 ))}
@@ -115,6 +120,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
             <select
               name="operators"
               id="operators"
+              aria-label="Operators"
               onChange={(event) =>
                 setSelectedOperator(findOperator(event.target.value))
               }
@@ -137,6 +143,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
               <select
                 name="property-values"
                 id="property-values"
+                aria-label="Property values"
                 multiple={selectedOperator?.id === "in"}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                   if (propertyValues && selectedOperator) {
