@@ -97,7 +97,9 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
               onChange={(event) =>
                 setSelectedProperty(findProperty(Number(event.target.value)))
               }
-              defaultValue="Select a property"
+              value={
+                selectedProperty ? selectedProperty.id : "Select a property"
+              }
             >
               <optgroup label="Properties">
                 <option value="Select a property" hidden>
@@ -145,6 +147,11 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                 id="property-values"
                 aria-label="Property values"
                 multiple={selectedOperator?.id === "in"}
+                defaultValue={
+                  selectedOperator?.id === "in"
+                    ? ["Select a value"]
+                    : "Select a value"
+                }
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                   if (propertyValues && selectedOperator) {
                     if (selectedOperator.id === "in") {
@@ -186,6 +193,9 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                 }}
               >
                 <optgroup label="Property values">
+                  <option value="Select a value" hidden>
+                    Select a value
+                  </option>
                   {propertyValues?.map((propVal, index) => (
                     <option key={index} value={String(propVal.value)}>
                       {propVal.value}
@@ -222,16 +232,19 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {filteredProducts.map((product) => {
+          {filteredProducts.map((product, rowIndex) => {
             return (
               <tr key={product.id}>
-                {product.property_values.map((val) => {
+                {properties.map((property) => {
+                  const val = product.property_values.find(
+                    (propVal) => propVal.property_id === property.id
+                  );
                   return (
                     <td
-                      key={val.property_id}
+                      key={property.id}
                       className={styles["products-table-data"]}
                     >
-                      {val.value}
+                      {val?.value ?? ""}
                     </td>
                   );
                 })}
